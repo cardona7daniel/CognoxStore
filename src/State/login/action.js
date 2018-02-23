@@ -25,21 +25,26 @@ function getDataLoginFailed(bVerifyDataLiquidation) {
   };
 }
 
-export default function requestGetDataLogin(data) {
+export default function requestGetDataLogin(data, next) {
   return (dispatch) => {
     dispatch(getDataLoginProgress());
     getDataUser(data)
       .then((response) => {
         if (response.statusText === 'OK') {
           dispatch(getDataLoginSuccess(response.data.User));
+          next();
         } else{
           dispatch(setMessage('Usuario o contraseña incorrecta', 'info'));
         }
       })
       .catch((error) => {
         console.log(error.response);
+        if(error.response.status === 403) {
+          dispatch(setMessage('Usuario o contraseña incorrecta', 'info'));
+        } else{
+          dispatch(setMessage('Error consultando los datos del usuario...', 'error'));
+        }
         dispatch(getDataLoginFailed());
-        dispatch(setMessage('Error consultando los datos del usuario...', 'error'));
       });
   };
 }

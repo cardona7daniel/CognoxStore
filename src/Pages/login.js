@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { Form, Icon, Input, Button, Row, Col, Spin } from 'antd';
 import { connect } from 'react-redux';
 import requestGetDataLogin from '../State/login/action';
+import Image from '../Images/logo.png'
+import Home from './home';
 
 const FormItem = Form.Item;
 
@@ -11,9 +13,10 @@ const StyleIcon = styled(Icon) `
   color: rgba(0,0,0,.25);
 `;
 
-// const ContentSpin = styled(Spin)`
-//   left: 0;
-// `;
+const StyleImage = styled.img`
+  width: 80%;
+  height: 60%;
+`;
 
 const ContentLogin = styled.div`
   margin: 50px auto 0;
@@ -25,12 +28,19 @@ const ContentLogin = styled.div`
   text-align: center;
 `;
 
+const HomePage = {
+  index: 1,
+  component: <Home />,
+};
+
 class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.requestGetDataLogin(values);
+        this.props.requestGetDataLogin(values, () => {
+          HomePage.component;
+        });
         console.log('Received values of form: ', values);
       }
     });
@@ -43,7 +53,7 @@ class Login extends Component {
         <ContentLogin>
           <Row>
             <Col span={24}>
-              <h2>c</h2>
+              <StyleImage src={Image} alt="Imágen Cognox" />
             </Col>
           </Row>
           <Form onSubmit={this.handleSubmit}>
@@ -83,8 +93,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestGetDataLogin: (data) => {
-    dispatch(requestGetDataLogin(data));
+  requestGetDataLogin: (data, next) => {
+    dispatch(requestGetDataLogin(data, next));
   },
 });
 
