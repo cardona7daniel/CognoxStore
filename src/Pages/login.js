@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Form, Icon, Input, Button, Row, Col, Spin } from 'antd';
 import { connect } from 'react-redux';
 import requestGetDataLogin from '../State/login/action';
-import Image from '../Images/logo.png'
-import Home from './home';
+import Image from '../Images/Cx_Logo_Store620x300.png'
 
 const FormItem = Form.Item;
 
@@ -14,8 +12,7 @@ const StyleIcon = styled(Icon) `
 `;
 
 const StyleImage = styled.img`
-  width: 80%;
-  height: 60%;
+  width: 70%;
 `;
 
 const ContentLogin = styled.div`
@@ -28,23 +25,30 @@ const ContentLogin = styled.div`
   text-align: center;
 `;
 
-const HomePage = {
-  index: 1,
-  component: <Home />,
-};
 
 class Login extends Component {
+
+  SaveDataLocalStorage = (data) => {
+    localStorage.setItem('dataUser', JSON.stringify(data));
+  };
+
+  afterLogin = (data) => {
+    const { onLogged, dataLogin } = this.props;
+    this.SaveDataLocalStorage(data);
+    onLogged(dataLogin);
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.requestGetDataLogin(values, () => {
-          HomePage.component;
+          this.afterLogin(this.props.dataLogin);
         });
-        console.log('Received values of form: ', values);
       }
     });
   }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { loading } = this.props;

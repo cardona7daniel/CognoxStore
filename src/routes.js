@@ -8,15 +8,15 @@ const routesApp = [
     index: index(),
     path: '/',
     component: asyncComponent(() =>
-      import('./Pages/login').then(module => module.default),
+      import('./Pages/home').then(module => module.default),
     ),
     exact: true,
   },
   {
     index: index(),
-    path: '/home',
+    path: '/product',
     component: asyncComponent(() =>
-      import('./Pages/home').then(module => module.default),
+      import('./Pages/product').then(module => module.default),
     ),
     exact: true,
   },

@@ -31,7 +31,8 @@ export default function requestGetDataLogin(data, next) {
     getDataUser(data)
       .then((response) => {
         if (response.statusText === 'OK') {
-          dispatch(getDataLoginSuccess(response.data.User));
+          console.log(response.data);
+          dispatch(getDataLoginSuccess(response.data));
           next();
         } else{
           dispatch(setMessage('Usuario o contraseña incorrecta', 'info'));
@@ -39,10 +40,10 @@ export default function requestGetDataLogin(data, next) {
       })
       .catch((error) => {
         console.log(error.response);
-        if(error.response.status === 403) {
+        if(error.response && error.response.status === 403) {
           dispatch(setMessage('Usuario o contraseña incorrecta', 'info'));
         } else{
-          dispatch(setMessage('Error consultando los datos del usuario...', 'error'));
+          dispatch(setMessage(error.stack, 'error', 'Error consultando la información del usuario.', 'Modal'));
         }
         dispatch(getDataLoginFailed());
       });
